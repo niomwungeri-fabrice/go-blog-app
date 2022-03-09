@@ -1,0 +1,39 @@
+create_table("users") {
+  t.Column("user_id", "uuid", {primary: true})
+  t.Column("username", "string", {"size": 50})
+  t.Column("password", "string", {"size": 250})
+  t.Column("names", "string", {"size": 10})
+  
+  t.Column("created_at", "timestamp", {})
+  t.Column("updated_at", "timestamp", {})
+  
+  t.Index("username", {"unique": true})
+}
+
+create_table("posts") {
+  t.Column("post_id", "uuid", {primary: true})
+  t.Column("title", "string", {"size": 100})
+  t.Column("content", "string", {"size": 100})
+  
+  t.Column("user_id", "uuid", {})
+  
+  t.Column("created_at", "timestamp", {})
+  t.Column("updated_at", "timestamp", {})
+
+  t.ForeignKey("user_id", {"users": ["user_id"]}, {"on_delete": "cascade"})
+}
+
+create_table("comments") {
+  t.Column("comment_id", "uuid", {primary: true})
+  t.Column("title", "string", {"size": 100})
+  t.Column("content", "string", {"size": 100})
+  
+  t.Column("post_id", "uuid", {})
+  t.Column("user_id", "uuid", {})
+  
+  t.Column("created_at", "timestamp", {})
+  t.Column("updated_at", "timestamp", {})
+
+  t.ForeignKey("user_id", {"users": ["user_id"]}, {"on_delete": "cascade"})
+  t.ForeignKey("post_id", {"posts": ["post_id"]}, {"on_delete": "cascade"})
+}
